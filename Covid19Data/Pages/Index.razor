@@ -1,0 +1,38 @@
+﻿@page "/"
+@page "/world"
+
+@inherits IndexBase
+
+@if (Data != null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <label class="col-3">Total Cases: @Data.TotalCases</label>
+            <label class="col-3">Total Deaths: @Data.TotalDeaths</label>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-4 header-col">Country</div>
+            <div class="col-4 header-col ml-1">Cases</div>
+            <div class="col-3 header-col ml-1">Deaths</div>
+        </div>
+        <div class="container-fluid table-body">
+            @foreach (var item in Data.CountryData)
+            {
+                <div class="row line mt-1">
+                    <div class="col-4 cell">@item.Country</div>
+                    <div class="col-4 cell ml-1">@item.Infected</div>
+                    <div class="col-3 cell ml-1">@item.Deceased</div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <p>Source: Apify</p>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}

@@ -1,0 +1,53 @@
+﻿@using ChartJs.Blazor.Charts
+
+@page "/brazil"
+@inherits BrazilBase
+
+@if (Data != null)
+{
+    <div class="container-fluid">
+        <EditForm Model="Mode" class="row">
+            <label class="col-3">Date: @Helper.FormatDate(Data.DailyData.Last().Date)</label>
+            <label class="col-2">Total Cases: @Data.TotalCases</label>
+            <label class="col-2">Total Deaths: @Data.TotalDeaths</label>
+            <label class="col-2">Chart Mode:</label>
+            <InputSelect id="Mode" @bind-Value="@Mode" class="col-2">
+                <option value="TOTAL" selected>Total</option>
+                <option value="DAILY">Daily</option>
+            </InputSelect>
+        </EditForm>
+    </div>
+
+    <div class="@((Mode.Equals("DAILY", StringComparison.InvariantCultureIgnoreCase)? "container-fluid" : "hide-chart container-fluid"))">
+        <ChartJsLineChart @ref="DailyChart" Config="@ConfigDaily" Width="500" Height="300" />
+    </div>
+
+    <div class="@((Mode.Equals("TOTAL", StringComparison.InvariantCultureIgnoreCase)? "container-fluid" : "hide-chart container-fluid"))">
+        <ChartJsLineChart @ref="TotalChart" Config="@ConfigTotal" Width="500" Height="300" />
+    </div>
+
+    <div class="container-fluid">
+        <div class="row header">
+            <div class="col-4 header-col">Date</div>
+            <div class="col-4 header-col ml-1">New Cases</div>
+            <div class="col-3 header-col ml-1">New Deaths</div>
+        </div>
+        <div class="container-fluid table-body">
+            @foreach (var item in Data.DailyData)
+            {
+                <div class="row line mt-1">
+                    <div class="col-4 cell">@Helper.FormatDate(item.Date)</div>
+                    <div class="col-4 cell ml-1">@item.NewCases</div>
+                    <div class="col-3 cell ml-1">@item.NewDeaths</div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <p>Source: FioCruz</p>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
